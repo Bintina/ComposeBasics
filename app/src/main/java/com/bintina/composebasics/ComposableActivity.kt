@@ -2,19 +2,24 @@ package com.bintina.composebasics
 
 //import androidx.compose.foundation.layout.ColumnScopeInstance.weight
 //import androidx.compose.foundation.layout.RowScopeInstance.weight
+
+import android.graphics.Paint
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.BoxScope
+import androidx.compose.foundation.layout.Arrangement
+
+
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
 
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
-
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -23,7 +28,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.bintina.composebasics.ui.theme.ComposeBasicsTheme
 
 class ComposableActivity : ComponentActivity() {
@@ -37,7 +45,11 @@ class ComposableActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    ComposableQuadrant()
+                    ComposableQuadrant(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .fillMaxHeight()
+                    )
                 }
             }
         }
@@ -46,12 +58,40 @@ class ComposableActivity : ComponentActivity() {
 
     @Composable
     private fun ComposableQuadrant(modifier: Modifier = Modifier) {
-        Box(
-            modifier = Modifier.fillMaxSize()
-        ) {
-            Column(
-                Modifier
-            ) {
+        BoxWithColumnLayout() {
+            Column(horizontalAlignment = Alignment.CenterHorizontally) {
+
+                BoxWithRowLayout() {
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        modifier = Modifier.weight(0.5f)
+                    ) {
+                        TextArticle()
+                    }
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        modifier = Modifier.weight(0.5f)
+                    ) {
+                        ImageArticle()
+                    }
+                }
+
+                BoxWithRowLayout {
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        modifier = Modifier.weight(0.5f)
+                    ) {
+                        RowArticle()
+                    }
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        modifier = Modifier.weight(0.5f)
+                    ) {
+                        ColumnArticle()
+                    }
+
+                }
+
 
             }
         }
@@ -59,77 +99,80 @@ class ComposableActivity : ComponentActivity() {
 
 
     @Composable
+    fun BoxWithRowLayout(content: @Composable (RowScope.() -> Unit)) {
+        Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.Center) {
+            content()
+        }
+    }
+
+    @Composable
+    fun BoxWithColumnLayout(content: @Composable (ColumnScope.() -> Unit)) {
+        Column(horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Center) {
+            content()
+        }
+    }
+
+    @Composable
     fun TextArticle() {
-        Column(modifier = Modifier.background(color = colorResource(id = R.color.text_quadrant))) {
-            Text(text = "Text composable", fontWeight = FontWeight.Bold)
-            Text(text = "Displays text and follows the recommended Material Design guidelines.")
+        Column(horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center,
+            modifier = Modifier
+                .background(color = colorResource(id = R.color.text_quadrant))
+                .fillMaxHeight(0.5f)
+                .padding(16.dp)
+
+        ) {
+            Text(text = "Text composable", fontWeight = FontWeight.Bold, modifier = Modifier.padding(0.dp,0.dp,0.dp,16.dp))
+            Text(text = "Displays text and follows the recommended Material Design guidelines.", fontSize = 16.sp, textAlign = TextAlign.Justify)
         }
     }
 
     @Composable
     fun ImageArticle() {
-        Column(modifier = Modifier.background(color = colorResource(id = R.color.image_quadrant))) {
-            Text(text = "Image composable", fontWeight = FontWeight.Bold)
-            Text(text = "Creates a composable that lays out and draws a given Painter class object.")
+        Column(horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center,
+            modifier = Modifier
+                .background(color = colorResource(id = R.color.image_quadrant))
+                .fillMaxHeight(0.5f)
+                .padding(16.dp)
+        ) {
+            Text(text = "Image composable", fontWeight = FontWeight.Bold, modifier = Modifier.padding(0.dp,0.dp,0.dp,16.dp))
+            Text(text = "Creates a composable that lays out and draws a given Painter class object.", fontSize = 16.sp, textAlign = TextAlign.Justify)
         }
     }
 
     @Composable
     fun RowArticle() {
-        Column(modifier = Modifier.background(color = colorResource(id = R.color.row_quadrant))) {
-            Text(text = "Row composable", fontWeight = FontWeight.Bold)
-            Text(text = "A layout composable that places its children in a horizontal sequence.")
+        Column(horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center,
+            modifier = Modifier
+                .background(color = colorResource(id = R.color.row_quadrant))
+                .fillMaxHeight(1f)
+                .padding(16.dp)
+        ) {
+            Text(text = "Row composable", fontWeight = FontWeight.Bold, modifier = Modifier.padding(0.dp,0.dp,0.dp,16.dp))
+            Text(text = "A layout composable that places its children in a horizontal sequence.", fontSize = 16.sp, textAlign = TextAlign.Justify)
         }
     }
 
     @Composable
     fun ColumnArticle() {
-        Column(modifier = Modifier.background(color = colorResource(id = R.color.column_quadrant))) {
-            Text(text = "Column composable", fontWeight = FontWeight.Bold)
-            Text(text = "A layout composable that places its children in a vertical sequence.")
-        }
-    }
-
-    @Composable
-    fun BoxWithRowLayout(content: @Composable RowScope.() -> Unit) {
-        Row {
-            content()
-        }
-    }
-
-    @Composable
-    fun BoxWithColumnLayout(content: @Composable ColumnScope.() -> Unit) {
-        Column {
-            content()
+        Column(horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center,
+            modifier = Modifier
+                .background(color = colorResource(id = R.color.column_quadrant))
+                .fillMaxHeight(1f)
+                .padding(16.dp)
+        ) {
+            Text(text = "Column composable", fontWeight = FontWeight.Bold, modifier = Modifier.padding(0.dp,0.dp,0.dp,16.dp))
+            Text(text = "A layout composable that places its children in a vertical sequence.", fontSize = 16.sp, textAlign = TextAlign.Justify)
         }
     }
 
     @Preview
     @Composable
     fun QuadrantPreview() {
-        BoxWithColumnLayout() {
-            Column(Modifier.weight(0.5f, true)) {
-
-                BoxWithRowLayout() {
-                    Row(Modifier.weight(0.5f)) {
-                        TextArticle()
-                    }
-                    Row(Modifier.weight(0.5f)) {
-                        ImageArticle()
-                    }
-                }
-            }
-            Column(Modifier.weight(0.5f, true)) {
-                BoxWithRowLayout {
-                    Row(Modifier.weight(0.5f)) {
-                        ColumnArticle()
-                    }
-                    Row(Modifier.weight(0.5f)) {
-                        RowArticle()
-                    }
-                }
-            }
-        }
+        ComposableQuadrant()
     }
 }
 
